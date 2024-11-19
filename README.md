@@ -27,9 +27,16 @@ This is a backend application built using the NestJS framework, Prisma ORM, and 
 
   ```bash
   npx prisma migrate dev --name init
+
+  ```
+4. Run the prisma client update
+
+  ```bash
+  npx prisma generate
+
   ```
 
-4. Start the development server:
+5. Start the development server:
 
   ```bash
   npm run start:dev
