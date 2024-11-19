@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// Despues de crear un modelo o editarlo hay que hacer la migracion con el comando 
+// > npx prisma migrate dev --name <nombre de la migracion>
+// Luego ejecutar el comando que actualiza el cliente 
+// > npx prisma generate
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model TipoVehiculo {
+  id            Int        @id @default(autoincrement())
+  clave         String     @unique @default(cuid())
+  descripcion   String
+  tarifa        Float
+  deleted       Boolean    @default(false)
+  vehiculos     Vehiculo[] // Relación uno a muchos con Vehiculo
+}
+
+model Vehiculo {
+  id               Int           @id @default(autoincrement())
+  placa            String        @unique  // Marcamos la placa como única
+  modelo           String
+  marca            String
+  cveTipoVehiculo  String      
+  tipoVehiculo     TipoVehiculo  @relation(fields: [cveTipoVehiculo], references: [clave])
+  parqueaderos     Parqueadero[] // Relación uno a muchos con Parqueadero
+  deleted          Boolean       @default(false)
+
+  @@index([cveTipoVehiculo])
+}
+
+model Parqueadero {
+  id            Int       @id @default(autoincrement())
+  placa         String    // Campo para la clave foránea
+  fechaIngreso  DateTime  @default(now())
+  fechaSalida   DateTime?  // Hice opcional la fecha de salida ya que al ingresar no tendrá fecha de salida
+  valor         Float
+  vehiculo      Vehiculo  @relation(fields: [placa], references: [placa])
+  deleted       Boolean   @default(false)
+
+  @@index([placa]) // Índice para mejorar el rendimiento de las búsquedas
+}
