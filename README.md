@@ -45,4 +45,4 @@ This is a backend application built using the NestJS framework, Prisma ORM, and 
 
 ## API Documentation
 
-The Swagger documentation is available at the `http://loccalhost:3000/api/docs` route.
+The Swagger documentation is available at the `http://localhost:3000/api/docs` route.
